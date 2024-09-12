@@ -9,7 +9,6 @@ sdf.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Tokyo"));
 User loginUser = (User)session.getAttribute("loginUser");
 List<Mutter> mutterList = (List<Mutter>)request.getAttribute("mutterList");
 String errorMsg = (String)request.getAttribute("errorMsg");
-String compliment = (String) request.getAttribute("compliment"); // OpenAIからの褒め言葉
 
 int currentPage = (int) request.getAttribute("currentPage");
 int totalPages = (int) request.getAttribute("totalPages");
@@ -31,7 +30,6 @@ int totalPages = (int) request.getAttribute("totalPages");
   <% if (loginUser != null) { %>
     <%= loginUser.getName() %>さん、ログイン中
     <a href="Logout" class="link">ログアウト</a>
-      <p class="compliment-msg"><%= compliment %></p>
   <% } else { %>
     <p>※投稿するにはログインが必要です。
     <a href="index.jsp" class="link">ログインページへ</a>
@@ -40,7 +38,7 @@ int totalPages = (int) request.getAttribute("totalPages");
 
 
 <% if (loginUser != null) { %>
-  <form action="OpenAIServlet" method="post" class="form-box">
+  <form action="Main" method="post" class="form-box">
     <textarea id="postContent" name="text" rows="4" maxlength="200" required></textarea>
     <div id="charCount" class="char-count">0/200</div>
     <input type="submit" value="投稿" class="btn submit-btn">
@@ -101,27 +99,6 @@ document.getElementById('postContent').addEventListener('input', function() {
 function confirmDelete() {
     return confirm("本当にこのつぶやきを削除しますか？");
 }
-
-
-document.getElementById('postForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // フォームのデフォルト送信を防止
-
-    var postContent = document.getElementById('postContent').value;
-
-    // AJAXリクエストでOpenAIServletに送信
-    fetch('OpenAIServlet', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({text: postContent})
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('complimentText').textContent = data.compliment.trim();
-    })
-    .catch(error => console.error('Error:', error));
-});
 
 </script>
 
