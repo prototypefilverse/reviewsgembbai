@@ -47,8 +47,8 @@ int totalPages = (int) request.getAttribute("totalPages");
 
 <div class="content-wrapper">
 
- <div class="form-section">
  <% if (loginUser != null) { %>
+ <div class="form-section">
   <!-- 掲示板投稿部分 -->
   <div class="board-section">
     <form action="Main" method="post" class="form-box">
