@@ -27,54 +27,66 @@ int totalPages = (int) request.getAttribute("totalPages");
 <div class="container">
   <h1 class="center-text">レビューズジェム掲示板</h1>
 
-<p class="user-info">
-  <% if (loginUser != null) { %>
-    <%= loginUser.getName() %>さん、ログイン中
-    <a href="Logout" class="link">ログアウト</a>
-  <% } else { %>
-    <p>※投稿するにはログインが必要です。
-    <a href="index.jsp" class="link">ログインページへ</a>
-  </p>
-  <% } %>
-
-
-<% if (loginUser != null) { %>
-<form action="OpenAIServlet" method="post" class="form-box">
-    <p><strong>【AIに何か尋ねる】</strong></p>
-    <div id="charCount" class="char-count">0/200</div>
-    <textarea id="postContent" name="text" rows="3" maxlength="200" required></textarea>
-    <input type="submit" value="質問" class="btn submit-btn">
-</form>
-<% if (aiResponse != null) { %>
-  <div class="ai-response">
-    <p>AIからの応答:<%= aiResponse %></p>
+ 
+  <div class="header-info">
+    <div class="user-info">
+      <% if (loginUser != null) { %>
+        <div class="login-status">
+          <span><%= loginUser.getName() %>さん、ログイン中</span>
+          <a href="Logout" class="link">ログアウト</a>
+        </div>
+      <% } else { %>
+        <p>※投稿するにはログインが必要です。
+        <a href="index.jsp" class="link">ログインページへ</a>
+      </p>
+      <% } %>
+    </div>
+    <a href="Main" class="link update-link">更新</a>
   </div>
-  <% session.removeAttribute("aiResponse"); %> <!-- 一時的な表示のためセッションから削除 -->
 
+
+<div class="content-wrapper">
+
+ <div class="form-section">
+ <% if (loginUser != null) { %>
+  <!-- 掲示板投稿部分 -->
+  <div class="board-section">
+    <form action="Main" method="post" class="form-box">
+      <p><strong>【掲示板に投稿する】</strong></p>
+      <textarea id="postContent" name="text" rows="4" maxlength="200" required></textarea>
+      <div id="charCount" class="char-count">0/200</div>
+      <input type="submit" value="投稿" class="btn board-submit-btn">
+    </form>
+  </div>
+   <div class="ai-section">
+    <form action="OpenAIServlet" method="post" class="form-box">
+      <p><strong>【AIに何か尋ねる】</strong></p>
+      <textarea id="aiQuestionContent" name="text" rows="4" maxlength="200" required></textarea>
+      <div id="charCount" class="char-count">0/200</div>
+      <input type="submit" value="質問" class="btn ai-submit-btn">
+    </form>
+     <!-- AIに質問する部分 -->
+    <% if (aiResponse != null) { %>
+      <div class="ai-response-box">
+        <p>AIからの応答:<%= aiResponse %></p>
+      </div>
+      <% session.removeAttribute("aiResponse"); %>
+    <% } %>
+    </div>
+  </div>
 <% } %>
-
-  <form action="Main" method="post" class="form-box">
-    <p><strong>【掲示板に投稿する】</strong></p>
-    <textarea id="postContent" name="text" rows="3" maxlength="200" required></textarea>
-    <div id="charCount" class="char-count">0/200</div>
-    <input type="submit" value="投稿" class="btn submit-btn">
-  </form>
-<% } %>
-
-
 
   <% if (errorMsg != null) { %>
     <p class="error-msg"><%= errorMsg %></p>
   <% } %>
 
-  <a href="Main" class="link">更新</a>
   <%-- for文 --%>
   <div class="mutter-list">
-  <% for (int i = 0; i < mutterList.size(); i++) { %>
-<div class="mutter-item">
-  <span class="mutter-dete">投稿日時：<%= sdf.format(mutterList.get(i).getPostDate()) %></span>
-  <span class="mutter-user">　<%= mutterList.get(i).getUserName() %></span>
-  <p class="mutter-text"><%= mutterList.get(i).getText() %></p>
+   <% for (int i = 0; i < mutterList.size(); i++) { %>
+   <div class="mutter-item">
+    <span class="mutter-dete">投稿日時：<%= sdf.format(mutterList.get(i).getPostDate()) %></span>
+    <span class="mutter-user">　<%= mutterList.get(i).getUserName() %></span>
+    <p class="mutter-text"><%= mutterList.get(i).getText() %></p>
 
       <%-- ログインしていない場合は表示せずNullPointerExceptionを防ぐ --%>
       <% if (loginUser != null && mutterList.get(i).getUserName().equals(loginUser.getName())) { %>
@@ -88,7 +100,8 @@ int totalPages = (int) request.getAttribute("totalPages");
       <% } %>
     </div>
   <% } %>
-  </div>
+  </div> 
+  
   <br>
     <div class="pagination">
     <% if (currentPage > 1) { %>
@@ -103,6 +116,8 @@ int totalPages = (int) request.getAttribute("totalPages");
       <a href="Main?pageNumber=<%= currentPage + 1 %>" class="link">次へ</a>
     <% } %>
   </div>
+</div>
+
 </div>
 
 <script>

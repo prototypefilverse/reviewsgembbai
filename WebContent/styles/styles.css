@@ -11,7 +11,7 @@ body {
 
 .container {
     width: 80%;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
@@ -25,6 +25,28 @@ h1, h2, h3 {
 
 .center-text {
     text-align: center;
+}
+
+.header-info {
+    display: flex;
+    align-items: center; /* 垂直方向の中央揃え */
+    justify-content: space-between; /* 要素の間にスペースを確保 */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* 上下の余白 */
+}
+
+.login-status {
+}
+
+
+.update-link {
+	padding-left: 100px;
+	padding-bottom: 20px;
+    margin-right: auto;
 }
 
 .form-box {
@@ -103,9 +125,6 @@ textarea {
     margin-bottom: 20px;
 }
 
-.mutter-list {
-    margin-top: 20px;
-}
 
 .mutter-item {
     background-color: #f9f9f9;
@@ -154,8 +173,8 @@ textarea {
 
 .footer {
     text-align: center;
-    padding: 10px;
-    background-color: #333;
+    padding: 0px;
+    background-color: rgba(128, 128, 128, 0.5); /* 半透明のグレー */
     color: #fff;
     margin-top: auto;
     font-size: 0.9em;
@@ -171,13 +190,15 @@ textarea {
 }
 
 .pagination {
+	display: flex;
+	flex-direction: column;
     text-align: center;
     margin-top: 20px;
 }
 
 .pagination a {
-    display: inline-block;
-    margin: 0 5px;
+    display: block; /* ブロック要素にすることで、縦に並ぶ */
+    margin: 5px 0; /* 上下の余白を設定 */
     padding: 10px 15px;
     text-decoration: none;
     color: #337ab7;
@@ -195,6 +216,77 @@ textarea {
     text-decoration: underline;
 }
 
+
+/* AI応答部分 */
+.ai-section {
+    background-color: #e6f7ff; /* 淡い青色で区別 */
+    padding: 0px 20px 0px 20px;
+    border: 1px solid #b3d7ff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.ai-response-box {
+    background-color: #ffffff;
+    border: 1px solid #b3d7ff;
+    padding: 0px;
+    margin-top: 10px;
+    border-radius: 4px;
+    color: #333;
+}
+
+.ai-submit-btn {
+	width: 100px;
+    background-color: #007bff;
+}
+
+.ai-submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 掲示板投稿部分 */
+.board-section {
+    background-color: #fffbe6; /* 淡い黄色で区別 */
+    padding: 0px 20px 0px 20px;
+    border: 1px solid #ffe4b3;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.board-submit-btn {
+	width: 100px;
+    background-color: #5cb85c;
+}
+
+.board-submit-btn:hover {
+    background-color: #4cae4c;
+}
+
+/* 横並びのコンテナ */
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* 要素間の余白 */
+}
+
+.form-section {
+    width: 40%; 
+    display: flex;
+    flex-direction: column; 
+    gap: 5px; /* フォーム間の余白 */
+}
+
+.mutter-list {
+    width: 60%; 
+}
+
+.mutter-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
 
 /* Responsive Design */
 @media (max-width: 600px) {
@@ -214,4 +306,18 @@ textarea {
     .user-info {
         text-align: center;
     }
+}
+
+@media (max-width: 850px) {
+    .content-wrapper {
+        flex-direction: column; /* 画面が狭い場合、縦並びにする */
+    }
+
+    .form-section {
+        width: 100%; /* 縦並びにしたときは、全体幅を使用 */
+    }
+    
+    .mutter-list {
+        width: 100%; 
+}
 }
