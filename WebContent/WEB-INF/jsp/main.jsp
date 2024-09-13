@@ -9,6 +9,7 @@ sdf.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Tokyo"));
 User loginUser = (User)session.getAttribute("loginUser");
 List<Mutter> mutterList = (List<Mutter>)request.getAttribute("mutterList");
 String errorMsg = (String)request.getAttribute("errorMsg");
+String aiResponse = (String)session.getAttribute("aiResponse"); 
 
 int currentPage = (int) request.getAttribute("currentPage");
 int totalPages = (int) request.getAttribute("totalPages");
@@ -38,12 +39,29 @@ int totalPages = (int) request.getAttribute("totalPages");
 
 
 <% if (loginUser != null) { %>
+<form action="OpenAIServlet" method="post" class="form-box">
+    <p><strong>【AIに何か尋ねる】</strong></p>
+    <div id="charCount" class="char-count">0/200</div>
+    <textarea id="postContent" name="text" rows="3" maxlength="200" required></textarea>
+    <input type="submit" value="質問" class="btn submit-btn">
+</form>
+<% if (aiResponse != null) { %>
+  <div class="ai-response">
+    <p>AIからの応答:<%= aiResponse %></p>
+  </div>
+  <% session.removeAttribute("aiResponse"); %> <!-- 一時的な表示のためセッションから削除 -->
+
+<% } %>
+
   <form action="Main" method="post" class="form-box">
-    <textarea id="postContent" name="text" rows="4" maxlength="200" required></textarea>
+    <p><strong>【掲示板に投稿する】</strong></p>
+    <textarea id="postContent" name="text" rows="3" maxlength="200" required></textarea>
     <div id="charCount" class="char-count">0/200</div>
     <input type="submit" value="投稿" class="btn submit-btn">
   </form>
 <% } %>
+
+
 
   <% if (errorMsg != null) { %>
     <p class="error-msg"><%= errorMsg %></p>

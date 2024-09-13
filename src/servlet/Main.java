@@ -80,7 +80,8 @@ public class Main extends HttpServlet {
 
 		}
 
-		doGet(request, response);
+        // 投稿後にメインページへリダイレクト
+        response.sendRedirect("Main");
 	}
 
 }
