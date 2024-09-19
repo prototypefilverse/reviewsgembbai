@@ -61,8 +61,7 @@ int totalPages = (int) request.getAttribute("totalPages");
    <div class="ai-section">
     <form action="OpenAIServlet" method="post" class="form-box">
       <p><strong>【AIに何か尋ねる】</strong></p>
-      <textarea id="aiQuestionContent" name="text" rows="4" maxlength="200" required></textarea>
-      <div id="charCount" class="char-count">0/200</div>
+      <textarea id="aiQuestionContent" name="text" rows="4" required></textarea>
       <input type="submit" value="質問" class="btn ai-submit-btn">
     </form>
      <!-- AIに質問する部分 -->
