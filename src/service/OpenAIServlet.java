@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,18 +46,19 @@ public class OpenAIServlet extends HttpServlet {
 
         try (Response apiResponse = client.newCall(apiRequest).execute()) {
             if (apiResponse.isSuccessful()) {
-                JSONObject jsonResponse = new JSONObject(apiResponse.body().string());
-                String aiResponse = jsonResponse.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
+            	
+            	String responseBody = apiResponse.body().string();
+            	JSONObject json = new JSONObject(responseBody);
+                String aiResponse = json.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
 
-                // セッションスコープにAIの応答を保存
-                HttpSession session = request.getSession();
-                session.setAttribute("aiResponse", aiResponse);
+                // AIの応答を返す
+                response.setContentType("text/plain; charset=UTF-8");
+                response.getWriter().write(aiResponse);
 
-                // メインページにリダイレクト
-                response.sendRedirect("Main");
             } else {
                 // エラー処理
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "APIエラーが発生しました");
+            	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            	response.getWriter().write("AIからの応答に失敗しました。");
             }
         }
     }

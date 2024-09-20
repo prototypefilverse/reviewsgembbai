@@ -9,7 +9,6 @@ sdf.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Tokyo"));
 User loginUser = (User)session.getAttribute("loginUser");
 List<Mutter> mutterList = (List<Mutter>)request.getAttribute("mutterList");
 String errorMsg = (String)request.getAttribute("errorMsg");
-String aiResponse = (String)session.getAttribute("aiResponse"); 
 
 int currentPage = (int) request.getAttribute("currentPage");
 int totalPages = (int) request.getAttribute("totalPages");
@@ -49,8 +48,9 @@ int totalPages = (int) request.getAttribute("totalPages");
 
  <% if (loginUser != null) { %>
  <div class="form-section">
-  <!-- 掲示板投稿部分 -->
+ 
   <div class="board-section">
+  
     <form action="Main" method="post" class="form-box">
       <p><strong>【掲示板に投稿する】</strong></p>
       <textarea id="postContent" name="text" rows="4" maxlength="200" required></textarea>
@@ -58,20 +58,16 @@ int totalPages = (int) request.getAttribute("totalPages");
       <input type="submit" value="投稿" class="btn board-submit-btn">
     </form>
   </div>
+  
    <div class="ai-section">
-    <form action="OpenAIServlet" method="post" class="form-box">
+     <div class="form-box">
       <p><strong>【AIに何か尋ねる】</strong></p>
-      <textarea id="aiQuestionContent" name="text" rows="4" required></textarea>
-      <input type="submit" value="質問" class="btn ai-submit-btn">
-    </form>
-     <!-- AIに質問する部分 -->
-    <% if (aiResponse != null) { %>
-      <div class="ai-response-box">
-        <p>AIからの応答:<%= aiResponse %></p>
-      </div>
-      <% session.removeAttribute("aiResponse"); %>
-    <% } %>
-    </div>
+      <textarea id="aiQuestionContent" name="text"  rows="4" required></textarea>
+      <button id="askAIButton" class="btn ai-submit-btn">尋ねる</button>
+      <div id="aiResponse" class="ai-response-box"></div>
+     </div>
+   </div>
+   
   </div>
 <% } %>
 
@@ -131,6 +127,27 @@ document.getElementById('postContent').addEventListener('input', function() {
 function confirmDelete() {
     return confirm("本当にこのつぶやきを削除しますか？");
 }
+
+//AIに質問を送信する非同期通信処理
+document.getElementById('askAIButton').addEventListener('click', function() {
+    var questionContent = document.getElementById('aiQuestionContent').value;
+    var aiResponseBox = document.getElementById('aiResponse');
+    aiResponseBox.innerHTML = '<div class="loader"></div>'; // ローディング表示
+    aiResponseBox.classList.remove('visible'); // 応答を非表示にしておく
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'OpenAIServlet', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // 応答を表示
+            aiResponseBox.innerHTML = 'AIからの応答: ' + xhr.responseText;
+            aiResponseBox.classList.add('visible'); // フェードイン効果
+        }
+    };
+    xhr.send('text=' + encodeURIComponent(questionContent));
+});
+
 
 </script>
 
