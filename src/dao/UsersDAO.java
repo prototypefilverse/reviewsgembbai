@@ -24,9 +24,9 @@ public class UsersDAO {
 	// MySQL用
 	// private final String url = "jdbc:mysql://localhost:8889/docotsubu"; // データベースのパスを指定
 	// private final String userr = "morikawa";
-	// private final String password = "00830080gG";
+	// private final String password = "----------";  // 使用時はPASSを入力
 	// Azure SQL Server用
-	private final String url = "jdbc:sqlserver://reviewsgembb.database.windows.net:1433;database=reviewsgembb;user=morikawasusumu@reviewsgembb;password=00830080gG;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+	private final String url = "jdbc:sqlserver://reviewsgembb.database.windows.net:1433;database=reviewsgembb;user=morikawasusumu@reviewsgembb;password=----------;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
 	public boolean isUserValid(String name, String pass){
 
